@@ -16,14 +16,14 @@ minimal_mistakes_skin    : "contrast" # "air", "aqua", "contrast", "dark", "dirt
 
 # Site Settings
 locale                   : "en-US"
-title                    : "rlee360"
+title                    : "ece396-source-separation"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
-name                     : "Richard Lee"
+name                     : "Source Separation"
 description              : "An amazing website."
-url                      : "https://rlee360.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+url                      : "https://ece396-source-separation.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
-repository               : "rlee360" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
+repository               : "ece396-source-separation" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 teaser                   : /assets/images/typewriter.jpg # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 logo                     : # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
 masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
@@ -92,9 +92,9 @@ analytics:
 
 # Site Author
 author:
-  name             : "Richard Lee"
+  name             : "Richard Lee and Matt Kribs"
   avatar           : /assets/images/profile.jpg # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "An engineering student trying to figure out his way through this brave new world."
+  bio              : "Two electrical engineering students at the Cooper Union"
   location         : "NYC"
   email            : "Lee66@cooper.edu"
   links:
@@ -103,20 +103,14 @@ author:
       # url: "mailto:Lee66@cooper.edu"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/rlee360"
-    - label: "LinkedIn"
-      icon: "fab fa-fw fa-linkedin"
-      url: "https://www.linkedin.com/in/richard-lee-793208173/"
+      url: "https://github.com/ece396-source-separation/"
 
 # Site Footer
 footer:
   links:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/rlee360"
-    - label: "LinkedIn"
-      icon: "fab fa-fw fa-linkedin"
-      url: "https://www.linkedin.com/in/richard-lee-793208173/"
+      url: "https://github.com/ece396-source-separation/"
 
 
 # Reading Files
