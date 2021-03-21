@@ -8,7 +8,7 @@ categories:
   - Musings
 toc: true
 ---
-# First
+
 As someone whose first introduction to programming was a Hello World script on a [BASIC Stamp](https://en.wikipedia.org/wiki/BASIC_Stamp) circa 2009, I always feel the urge to write some form of Hello World on every new platform or language I pick up, almost as a good luck ritual. Something about knowing that my program can greet me makes me feel a little better -- almost as if I have the grace of the gods to proceed on my perilous journey.
 
 As to the phrase "Hello, World!" itself: in its original form, the clause was all lowercase, no exclamation point, with the two words separated by a single comma and space. The importance of this comma is [sometimes contested](https://english.stackexchange.com/questions/74985/should-the-beginners-program-read-hello-world), and these days many programmers opt to exclude it. The use of the phrase "Hello, World!" was popularized by the widely renowned book _The C Programming Language_:
@@ -19,8 +19,6 @@ As to the phrase "Hello, World!" itself: in its original form, the clause was al
 >
 >This is a big hurdle; to leap over it you have to be able to create the program text somewhere, compile it successfully, load it, run it, and find out where your output went. **With these mechanical details mastered, everything else is comparatively easy.**  
 ><p class="small"><cite>Kernighan and Ritchie, The C Programming Language</cite></p>
-
-# Second
 
 I'm not quite sure how accurate that last statement is. I don't exactly consider the book light reading for someone who has never coded before. However, after learning C once and then coming back to this book, I can see why it is **the** reference on C.
 
