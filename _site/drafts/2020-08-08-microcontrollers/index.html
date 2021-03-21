@@ -1,0 +1,29 @@
+<p><em>The future is now, old man</em></p>
+
+<p>I suppose the title says it all, but I recently decided to get back into seriously making electronics projects for the first time since starting university. Sure, I wired countless circuits for labs/classes, and I wrote a few Arduino programs here and there (most of which were minor automation scripts). But not much in terms of a polished project that I could show for.</p>
+
+<p>During my internship last summer I designed and built a Raspberry Pi-based sign-in/sign-out system. I used an MFRC522 breakout board with some RFID cards for the hardware, and the software I used Python Tkinter to make a nice GUI. It was quite a worthwhile experience in designing front end and back end software to display card taps and log time, but it was, at heart, a software project. I did, however get a chance to really grill the MFRC522 datasheet to see if I could squeeze more range (spoiler: you can set some variables to get up to 1 cm or so range).</p>
+
+<p>Author’s Note: I’m going to focus on the Arduino framework/C landscape since that is what I am most familiar with.</p>
+
+<p>Up until the past few weeks, I had not really been paying too much attention to the DIY electronics community. When I last left it, The ATMega 32u4 was relatively popular, Adafruit had just come out with its Feather line of products, and ESP8266 was this chip that was starting to gain traction. My fuzzy concept of the chip was that it gave the Arduino Wi-Fi capabilities so you could do some cool IoT projects with it, but that was it.</p>
+
+<p>Now a little aside about my skill levels before I made this fabled ‘departure’. While I had worked on/coded up my fair share of projects, from a weather balloon to a prom dress, the extent of my programming knowledge was pieced together from the various projects I had done and an assortment of internet tutorials. I had not received any formal training in programming but I knew my way around the Arduino programming language. Freshman year I took Introduction to Programming Languages, where I learned about basic and more advanced C/C++. Fall Junior year I took Operating Systems, where we did even more in-depth C. Spring Junior year I took Communication Networks, where we learned about the IP stack (more on this later).</p>
+
+<p>Armed with all this new knowledge in new experience, I decided to conduct an independent study&lt;FOOTNOTE&gt; with some class mates on embedded systems. I wanted to try purer embedded C, instead of just relying on the Arduino framework all the time. So we looked into different architectures.</p>
+
+<p>I had heard of the STM32 line-up, so I started with that, and discovered a whole world of processors in the form of ARM Cortex. I was so shocked with the specs on some of these chips compared to the measly Arduino. More shockingly, the Nucleo development boards for these chips were not 50 or 100 dollars, but around $15! That is half the price for what I had paid for my first Arduino Uno R1 almost 10 years ago!</p>
+
+<p>For the independent study, we picked up the Nucleo-STM32L476RG, which offered some ultra-low power sleep modes, as well as a wide array of other features.</p>
+
+<h3 id="like-a-kid-in-the-worlds-largest-candy-store-i-was-awe-struck">Like a kid in the world’s largest candy store, I was awe-struck.</h3>
+
+<p>While waiting for it to arrive in the mail, I researched more into the STM32 line and was floored by the STM32 SensorTile. Same processor as the board I had ordered, except this little guy packed a microphone, accelerometer, gyroscope, barometer, and BLE all in a 13.5mm^2 package that costs only $35!</p>
+
+<p>I then started poking around some more when I discovered the M5Stick C, which was a neatly packaged ESP32 (big brother to the ESP8266, so Wi-Fi and Bluetooth), along with an accelerometer/gyroscope, IR transmitter, microphone, LCD, and a built in LiPo battery. This unit was a full dev kit for $10!</p>
+
+<p>Like a kid in the world’s largest candy store, I was awe-struck. So much had changed since I ‘left’. I kept hearing the words, “The future is now, old man” echoing through my head: the boards I had used in the past paled in comparison to these new giants, and some of the things that we might have needed an SBC for in the past can be accomplished on a bare metal microcontroller. I ultimately picked up an M5Stack Grey, which packs a larger screen. I have been developing on it since.</p>
+
+<p>I have since written a basic multi search string HTTPS web scraper for the ESP32, and am working on an HVAC control. Armed with my Communication Networks knowledge, I have quite the firm grasp on the various types of HTTP requests and what is going on behind the scenes. Using my new, better programming skills, I have been able to write more complicated code with better fluidity than I have been in the past. I must admit it’s quite nice to know what you need to do to get where you want to go.</p>
+
+<p>Currently I am working on a basic control for our homebrew HVAC system, so hopefully will pick up some interesting skills there.</p>

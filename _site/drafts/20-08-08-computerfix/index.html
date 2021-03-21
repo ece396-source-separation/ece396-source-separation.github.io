@@ -1,0 +1,74 @@
+<p>Tech isn’t perfect.</p>
+
+<p>As an engineering student, I know that too well.</p>
+
+<p>And sometimes, stuff breaks.</p>
+
+<p>Sometimes it is due to mechanical failure, other times electrical failure.</p>
+
+<p>And of course, we cannot forget: human error.</p>
+
+<p>So let me tell you about the story of how my computer came to the destitute position that it is in now, and what I have been doing about it.</p>
+
+<p>(if you are familiar with Linux, C, drivers, and all around computer terms, skip this section)</p>
+
+<p>So every computer has a few parts that come together to make the computer:</p>
+<ol>
+  <li>Central Processing Unit (CPU) - This is the brains of the computer. Does all the computations that make your computer, a computer. There are generally a few, fast ‘cores’ that do work (usually up to 16 for most home desktop computers).</li>
+  <li>Graphical Processing Unit (GPU) - The part of the computer that renders pictures on your screen and ensures that your games are coming out at some fps. The GPU has hundreds of ‘slower’ cores - the idea is to trade computation speed for more parallelism.</li>
+  <li>Hard Drive - Where all your files are stored. Two main types: HDD, which has a spinning disk and a needle to read and write 1s and 0s; SSD, which uses transistors to store bits, so no moving parts. HDDs are generally slower and more prone to failure because moving parts.* Compared to the speed of the CPU, however, HDDs and SSDs are significantly slower, which motivates the next form of memory.</li>
+  <li>Random Access Memory (RAM) - This is where the computer stores programs, computations and other things for access later. RAM is ‘faster’ than a hard drive, as it is figuratively closer to the CPU (we refer to this as higher up in the memory hierarchy, with hard drives at the bottom).</li>
+  <li>Bonus! Next up on the memory hierarchy are Registers, which are memory locations <em>inside</em> the actual CPU! They are <em>even</em> faster than RAM as they are right up in the CPU.</li>
+  <li>Motherboard (MoBo) - This contains all the hardware to connect everything together. It’s like a landing base of sorts for all the parts. It also contains the BIOS, which contains instructions as to where to load the operating system or what settings to run the CPU with.</li>
+  <li>Power Supply (PSU) - This is the part of the computer that, well, supplies power to all the other parts. It has a lot of outgoing cables.</li>
+</ol>
+
+<p>*There is an argument can be made regarding the permanence of data on HDD vs SSD. A wise friend once said, “HDDs have a rough time limit, while SSDs have a rough write limit.” If data permanence is of concern, have redundant copies! Or just use magnetic tape.</p>
+
+<p>My Computer Specs (2019-2020)</p>
+<ol>
+  <li>AMD Ryzen 7 1700</li>
+  <li>AMD Radeon RX580 4GB (extracted from a prebuilt PC)</li>
+  <li>1 4TB WD Green HDD, 1 2TB Seagate HDD, 1 500GB HDD (brand uncertain)</li>
+  <li>32 GB Ram</li>
+  <li>Asus Prime x370-Pro Motherboard</li>
+</ol>
+
+<p>“If it ain’t broke, don’t fix it”
+For the longest time I ran Ubuntu Gnome 16.04 on both my desktop and my Laptop.</p>
+
+<p>Sometime during Spring 2018, I experienced an issue with Ubuntu on my laptop, and so I gave up and switched to Debian 9 Gnome, which was largely the same, save for less bloatware and fewer software repositories. It was really stable, which I really liked.</p>
+
+<p>Around Fall 2019, I was still running Ubuntu on my desktop, because “if it ain’t broke, don’t fix it.” It seemed to be working well enough for my needs, until I went to watch some 4K videos on YouTube and noticed some major screen tearing. Screen tearing occurs when there is a mismatch in refresh rates and your display shows two different frames in the same screen draw.</p>
+
+<p>I had recently upgraded from an older Nvidia Graphics Card to an AMD Radeon Card, though I had not added any new drivers - I simply swapped out the cards. I figured there must be some sort of driver mismatch, so I set out to update the drivers.</p>
+
+<p>For the uninitiated, Linux users are generally advised to avoid installing drivers from the manufacturer website. This is because if you undergo any sort of kernel update, the drivers will not be tracked by the package manager, and you will be forced to rebuild the driver.</p>
+
+<p>Lucky for me, I was running Ubuntu, which does do updates to the kernel when you run <code class="language-plaintext highlighter-rouge">sudo apt update &amp;&amp; sudo apt upgrade</code></p>
+
+<p>Despite all the warnings I had ever heard, I went ahead and downloaded the driver from the AMD website anyway. I set out on installing them, and somewhere during the install a compile/file move failed. This was almost 8 months ago, so the exact issue eludes me, but I recall trying and failing to pinpoint the problem. I decided to call it for the evening, and shut down my computer. Little did I know this would be one of the last times I would see my Ubuntu Gnome desktop environment.</p>
+
+<p>Emergency Repair
+Upon booting up the next time around, I realized I had no graphics! Worse, I could not descend into a console via Ctrl + Alt + F1 because gdm kept trying to reload the login screen! All I saw was rapid flashing between the Gnome login screen and the black console. Rebooting into an older kernel did not help, though I managed to get into Ubuntu’s safe mode. I did some research and finally found how to use a bash for loop and dpkg to remove all traces of the AMD driver that had failed to properly install.</p>
+
+<p>https://community.amd.com/thread/212504</p>
+
+<p>Returning to my desktop
+After purging all traces and some boot flags later, I finally managed to get into a GUI where I promptly copied out the important files. I did not dare reboot. I knew it was just about time to move onto a new OS.</p>
+
+<p>HiDPI
+The information presented here is no longer up to date, and I am currently running Debian 10, but this was a problem I experienced at one point.</p>
+
+<p>What had kept me on Ubuntu Gnome 16.04 was that I had carefully customized it to work with my 4K HiDPI display. Font sizes, application zoom ratios. Gnome did not make this too easy, but it was manageable. I decided since Debian 9 was so stable on my laptop, might as well give Debian 10 a try.</p>
+
+<p>One Live USB later, and I was looking at a microscopic Gnome Desktop environment. Gnome had moved the HiDPI scaling in their newer versions, but poking around, I managed to find the 200% button and all the fonts became gigantic, as I had expected. No worries. I installed a few programs like Google Chrome and Gparted to test the HiDPI, and much to my dismay, Chrome did not honor the HiDPI scaling, while Firefox did. After doing some poking around, I reasoned that HiDPI in Gnome was not exactly functional especially with Electron-based apps.</p>
+
+<p>I installed Debian 10 nonetheless, opting to use Cinnamon instead. I didn’t love it, but I needed <em>something</em> to work. HiDPI worked nicely, even though I still had screen tearing. Facepalms.</p>
+
+<p>During a vacation, I decided that I would just switch back to Debian 9 Gnome because I knew that HiDPI worked nicely. The graphics drivers did not work out of the box at all (hello 1366x768), so I had to follow some online guides to get the Radeon drivers up using Debian backports and functional, though I had to compile a package or two from source, which always made me uneasy.</p>
+
+<p>Locking Up
+Debian 9 was very stable except for the fact that I would get lock ups - after being away from my computer for an hour or two, I would find my system completely frozen, not accepting of keyboard inputs, not accessible via SSH, nothing. Only a hard reset would fix. What made it worse was that the kernel logs didn’t document any crashes or failures. Sometimes, however, I would get a corrupted kernel log, which made me suspicious.</p>
+
+<p>I chocked it up to the broken graphics drivers.</p>

@@ -1,0 +1,21 @@
+---
+layout: archive
+classes: wide
+---
+
+{{ content }}
+
+{% assign label = "Musings" %}
+{% assign postsByCategory = site.posts | group_by_exp: 'post', 'post.categories' %}
+{% for category in postsByCategory %}
+    {% if category.name contains label %}
+    <section id="{{ category.name }}" class="taxonomy__section">
+        <div class="entries-{{ page.entries_layout | default: 'list' }}">
+        {% for post in category.items %}
+            {% include archive-single.html type=page.entries_layout %}
+        {% endfor %}
+        </div>
+        <a href="#page-title" class="back-to-top">{{ site.data.ui-text[site.locale].back_to_top | default: 'Back to Top' }} &uarr;</a>
+    </section>
+    {% endif %}
+{% endfor %}

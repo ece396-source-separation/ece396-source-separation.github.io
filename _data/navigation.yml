@@ -1,0 +1,11 @@
+main:
+  - title: "Posts"
+    url: /posts/
+  - title: "Musings"
+    url: /musings/
+  # - title: "Categories"
+  #   url: /categories/
+  # - title: "Tags"
+  #   url: /tags/
+  - title: "About"
+    url: /about/
