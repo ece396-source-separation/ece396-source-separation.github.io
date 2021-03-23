@@ -16,7 +16,7 @@ You sit across the table from your friend. It's noisy, with many other conversat
 
 # Cocktail Party Problem
 
-The Cocktail Party Effect is the, "ability for people to focus their auditory attention on one source," whether that be a friend at a party, or a waiter in a restaurant. It has been said that listeners are able to segregate the different audio sources, and tune into one, as opposed to the others [^1]. 
+The Cocktail Party Effect is the, "ability for people to focus their auditory attention on one source," whether that be a friend at a party, or a waiter in a restaurant. It has been said that listeners are able to segregate the different audio sources, and tune into one, as opposed to the others[^1]. 
 
 However, the ability to "tune in" to a single voice is highly dependent on a number of features, including speaker pitch, location, rate of speech, and the listener's hearing capability. In other words: different people, when presented with a situation with multiple speakers, will only be able to pick out a selection of the words that are being spoken, and not necessarily only from the speaker of interest.
 
@@ -46,7 +46,7 @@ Neural networks are not limited in the same way that BSS methods like ICA are - 
 
 A commonly used tool in the field of audio processing is the **spectrogram**, which is a 2D representation of an audio signal, generated using a Short Time Fourier Transform (STFT) with frequencies on one axis and time on another. The intensity of each 'pixel' represents the intensity of a frequency at any given time. Conventional wisdom was always that spectrograms are _vital_ tools for source separation, as intuitively, separating the frequencies should assist with the separation.
 
-However, in recent literature [^2], it was found that neural networks could achieve very accurate results without performing the time-consuming STFT operation and its inverse. 
+However, in recent literature[^2], it was found that neural networks could achieve very accurate results without performing the time-consuming STFT operation and its inverse. 
 
 > Insert audio samples here
 
@@ -67,5 +67,6 @@ On the one hand, we plan on investigating traditional reconstruction techniques 
 In order to decrease latency, we are looking into the [ONNX standard](https://github.com/onnx/onnx) and [TensorRT](https://developer.nvidia.com/tensorrt), which should better optimize the neural network for fast compuation.
 
  
-[^1] https://www.ee.columbia.edu/~dpwe/papers/Cherry53-cpe.pdf
-[^2] https://arxiv.org/pdf/1809.07454.pdf
+[^1]: https://www.ee.columbia.edu/~dpwe/papers/Cherry53-cpe.pdf
+
+[^2]: https://arxiv.org/pdf/1809.07454.pdf
