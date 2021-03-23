@@ -32,7 +32,7 @@ The traditional way to separate voices from a mixture is Blind Source Separation
 
 One such algorithm is **Independent Component Analysis** which requires that there are at least as many microphones as there are voices in the mixture, and relies on the assumption that the signals are non-Gaussian and independent, which are not necessarily always true.
 
-> Insert audio samples here
+<audio src="assets/audio/mixed-sable.wav"></audio>
 
 In addition, the necessity for multiple microphones makes this algorithm difficult to deploy in practice.
 
