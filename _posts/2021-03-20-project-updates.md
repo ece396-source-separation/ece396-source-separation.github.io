@@ -32,9 +32,6 @@ The traditional way to separate voices from a mixture is Blind Source Separation
 
 One such algorithm is **Independent Component Analysis** which requires that there are at least as many microphones as there are voices in the mixture, and relies on the assumption that the signals are non-Gaussian and independent, which are not necessarily always true.
 
-<audio controls>
-<source src="/assets/audio/mixed-sable.wav" type="audio/wav">Your browser does not support the audio element.</audio>
-
 In addition, the necessity for multiple microphones makes this algorithm difficult to deploy in practice.
 
 ## Neural Networks for Audio Separation
@@ -43,13 +40,33 @@ Artificial Neural Networks, or also referred to as neural networks, have proven 
 
 Neural networks are not limited in the same way that BSS methods like ICA are - so long as the training data are representative of the testing data, there are fewer limitations on the properties of the original sources or the mixture.
 
-### Aside: Spectrograms
+> ### Aside: Spectrograms
+> A commonly used tool in the field of audio processing is the **spectrogram**, which is a 2D representation of an audio signal, generated using a Short Time Fourier Transform (STFT) with frequencies on one axis and time on another. The intensity of each 'pixel' represents the intensity of a frequency at any given time. Conventional wisdom was always that spectrograms are _vital_ tools for source separation, as intuitively, separating the frequencies should assist with the separation.
+>
+> However, in recent literature, it was found that neural networks could achieve very accurate results without performing the time-consuming STFT operation and its inverse.
 
-A commonly used tool in the field of audio processing is the **spectrogram**, which is a 2D representation of an audio signal, generated using a Short Time Fourier Transform (STFT) with frequencies on one axis and time on another. The intensity of each 'pixel' represents the intensity of a frequency at any given time. Conventional wisdom was always that spectrograms are _vital_ tools for source separation, as intuitively, separating the frequencies should assist with the separation.
+Specifically, we are using the Conv-TasNet[^2] architecture, which is a network that operates solely in the time domain, but is still able to produce relatively accurate results:
 
-However, in recent literature[^2], it was found that neural networks could achieve very accurate results without performing the time-consuming STFT operation and its inverse. 
+Raw Audio:
 
-> Insert audio samples here
+<audio controls>
+<source src="/assets/audio/sx98_raw.wav" type="audio/wav">Your browser does not support the audio element.</audio>
+
+<audio controls>
+<source src="/assets/audio/sable_raw.wav" type="audio/wav">Your browser does not support the audio element.</audio>
+
+Mixed Audio:
+
+<audio controls>
+<source src="/assets/audio/mixed-sable.wav" type="audio/wav">Your browser does not support the audio element.</audio>
+
+Unmixed Audio:
+
+<audio controls>
+<source src="/assets/audio/mixed-sable_est1.wav" type="audio/wav">Your browser does not support the audio element.</audio>
+
+<audio controls>
+<source src="/assets/audio/mixed-sable_est1.wav" type="audio/wav">Your browser does not support the audio element.</audio>
 
 ## Real-Time Considerations
 
