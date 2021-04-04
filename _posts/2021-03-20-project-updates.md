@@ -2,7 +2,7 @@
 title: "Mid-Semester Project Updates"
 excerpt: "Reaching Delayed Source Separation"
 header:
-  overlay_image: /assets/images/splash.jpg
+  overlay_image: /assets/images/Cocktail-party.webp
 last_modified_at: 1969-12-31T06:59:59-5:00
 categories:
 toc: false
