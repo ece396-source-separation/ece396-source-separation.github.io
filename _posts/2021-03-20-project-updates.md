@@ -45,7 +45,7 @@ Neural networks are not limited in the same way that BSS methods like ICA are - 
 >
 > However, in recent literature, it was found that neural networks could achieve very accurate results without performing the time-consuming STFT operation and its inverse.
 
-Specifically, we are using the Conv-TasNet[^2] architecture, which is a network that operates solely in the time domain, but is still able to produce relatively accurate results:
+Specifically, we are using the Conv-TasNet[^2] architecture, which is a convolutional network that operates solely in the time domain, but is still able to produce relatively accurate results:
 
 Raw Audio:
 
