@@ -11,25 +11,25 @@ You sit across the table from your friend. It's noisy, with many other conversat
 
 ## Cocktail Party Problem
 
-The Cocktail Party Effect is the, "ability for people to focus their auditory attention on one source," whether that be a friend at a party, or a waiter in a restaurant. It has been said that listeners are able to listen to mixed audio from many sources, and pick out individual audio sources[^1]. 
+The Cocktail Party Effect is the, "ability for people to focus their auditory attention on one source,"[^1] whether that be a friend at a party, or a waiter in a restaurant. Humans, in general, are able to listen to mixed audio from many sources, and hone their focus on individual audio sources. 
 
-{% include image.html url="assets/images/shadowing.png" description="Shadowing, a dichotic listening experiment, presents a participant with two different audio messages, and asks the participant to focus on one of the messages and repeat it aloud as a way of measuring perceptual ability." %}
+{% include image.html url="assets/images/shadowing.png" description="Shadowing, a dichotic listening experiment, presents a participant with two different voice messages, and asks the participant to focus on one of the messages and repeat it aloud as a way of measuring perceptual ability." %}
 
-The ability to "tune in" to a single voice is highly dependent on a number of features, including speaker pitch, location, rate of speech, and the listener's hearing capability. In other words: different people, when presented with a situation with multiple speakers, will only be able to pick out a selection of the words that are being spoken, and not necessarily only from the speaker of interest.
+However, this ability is not perfect: a listener may not necessarily pick up words and sounds only from the speaker of interest. The ability to "tune in" to a single voice is highly dependent on a number of features, including speaker pitch, location, rate of speech, and the listener's hearing capability. If a person only has one functional ear, or is hard of hearing, focusing on a single voice can be very difficult: with only one ear, it is difficult to determine locality of the speaker, and when hard of hearing, all sounds come through with limited fidelity.
 
-Moreover, if a person only has one functional ear, or is hard of hearing, the task becomes even more difficult: with only one ear, it is difficult to determine locality of the speaker, and when hard of hearing, all sounds come through with limited fidelity.
+So what if there was a way that we could make a device that could 'tune out' conflicting voices, listening only to the speaker of interest? Such a device would not only have to separate voices from a mixture, but also do it in a semi-real time fashion in order for it to be useful for day-to-day usage.
 
-So what if there were ways that we could make a device that could 'tune out' conflicting voices, listening only to the speaker of interest? Such a device would not only have to be able separate voices from a mixture, but also do it in a semi-real time fashion in order for it to be useful in a restaurant setting. Let's look more at ways to accomplish that first requirement.
+Let's start by looking into ways to accomplish voice separation.
 
 ## Blind Source Separation
 
-The traditional way to separate voices from a mixture is Blind Source Separation (BSS). "Blind" refers to the fact that the process by which the voices were mixed is unknown. BSS algorithms assume properties of the signal sources and the mixing processes and use those assumptions to try to reconstruct the original audio.
+The traditional way to separate voices from a mixture is Blind Source Separation (BSS). "Blind" refers to the fact that the process by which the voices were mixed is unknown. BSS algorithms assume properties of the signal sources and the mixing processes, and then they use those assumptions to try to reconstruct the original audio.
 
-One such algorithm is **Independent Component Analysis** which requires that there are at least as many microphones as there are voices in the mixture, and relies on the assumption that the signals are non-Gaussian and independent, which are not necessarily always true.
+One such algorithm is **Independent Component Analysis**, which requires that there are at least as many microphones as there are voices in the mixture, and relies on the assumption that the signals are non-Gaussian and independent.
 
-In addition, the necessity for multiple microphones makes this algorithm difficult to deploy in practice.
+The necessity for multiple microphones make this algorithm particularly tricky, as the location of the mics and the hardware they are connected to can introduce phase delays that prevent the final audio samples from aligning properly.
 
-Let's see -- erm, listen to what happens when we use ICA:
+Let us try an example of ICA to demonstrate this.
 
 Microphones 1 and 2
 <audio controls>
@@ -83,11 +83,15 @@ Unmixed Audio:
 
 The unmixed audio sounds almost perfectly like the original, save for some small artifacts in the left estimation when the speaker says the word "question" (headphones make it easier to hear this artifact). These high accuracy estimations show promise for creating a source separation system.
 
-### Real-Time Considerations
+## Real-Time Considerations
 
-In most fields, real-time performance is very difficult, as each part of the pipeline must be optimized in order to minimize latency. In the case of source separation, audio collection from the input microphone must be parallelized with the neural network that is processing the data. In addition, the data must be divided into chunks which are passed through the neural network. However, if the neural network cannot process the input audio faster than it is coming in, the latency will still accumulate. In essence, this becomes a [producer-consumer problem](https://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem).
+In many fields, real-time performance is a very difficult task, usually requiring each part of the pipeline must be optimized to minimize latency. In the case of source separation, audio collection from the input microphone must be parallelized with the processing on the neural network.
 
-Some options for decreasing latency include: multithreading the python code, so audio can be recorded while the neural network performs computations, truncating the floating point precision, and using a faster language, such as C++. We are currently in the process of experimenting with these optimizations.
+In the case of Conv-TasNet and other contemporary neural network architectures, the data must be divided into chunks for processing However, if the neural network cannot process the input audio faster than it is coming in, the latency will accumulate for every chunk and result in completely non-synced output. In essence, this becomes a [producer-consumer problem](https://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem).
+
+##
+
+Some options for decreasing latency include: multithreading the python code, so audio can be recorded while the neural network performs computations, truncating the floating point precision to improve speed, and using a faster language, such as C++. We are currently in the process of experimenting with these optimizations.
 
 ### Results and Next Steps
 
