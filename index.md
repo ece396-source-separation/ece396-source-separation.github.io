@@ -30,7 +30,7 @@ Watch-- er, listen to what happens when you use ICA with only a single microphon
 
 Mixture (i.e. the overlapping voices)
 <audio controls>
-<source src="/assets/audio/ICA/mixed-sable.wav" type="audio/wav">Your browser does not support the audio element.</audio>
+<source src="/assets/audio/ICA/mix.wav" type="audio/wav">Your browser does not support the audio element.</audio>
 
 Recovered Sources
 <audio controls>
