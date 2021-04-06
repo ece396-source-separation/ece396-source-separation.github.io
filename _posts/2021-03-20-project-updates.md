@@ -92,7 +92,7 @@ In order to decrease latency, we are looking into the [ONNX standard](https://gi
 
 The authors of the Conv-TasNet paper propose a three-stage design: an encoder, a "separation module" which forms the masks, and a decoder. For starters, the encoder convolves the mixture waveform with a number of filters (512 in the author's implementation).
 
-Moving onto the separation module, we note that it is the $(T \times \text{enc\_dim})$ encoding that is being masked, not the $(T \times 1)$ signal, making the use of the term "mask" in this paper somewhat unconventional. As for how the masks are created, depthwise separable convolutions are used to form one $(T \times \text{enc\_dim})$ mask for each source, and the convolutions use exponentially increasing dilation factors to detect both short-term and long-term dependencies.
+Moving onto the separation module, we note that it is the $(T \times \text{enc\_dim})$ encoding that is being masked, not the $(T \times 1)$ signal, making the use of the term "mask" in this paper somewhat unconventional. As for how the masks are created, depthwise separable convolutions are used to form one \\(T \times \text{enc\_dim}\\) mask for each source, and the convolutions use exponentially increasing dilation factors to detect both short-term and long-term dependencies.
 
 Lastly, the decoder performs a transposed convolution on each masked encoding, resulting in the separated sources, each with the same shape as the mixture waveform.
 
