@@ -44,8 +44,7 @@ Recovered Sources
 <source src="/assets/audio/ICA/recon_source_1.wav" type="audio/wav">Your browser does not support the audio element.</audio>
 
 <audio controls>
-<source src="/assets/audio/ICA/recon_source_2.wav" type="audio/wav">Your browser does not support the audio element.</audio>
-<br/>
+<source src="/assets/audio/ICA/recon_source_2.wav" type="audio/wav">Your browser does not support the audio element.</audio><br/>
 
 In conclusion, not much unmixing was done.
 
@@ -60,7 +59,7 @@ Neural networks are not limited in the same way that BSS methods like ICA are - 
 >
 > However, in recent literature, it was found that neural networks could achieve very accurate results without performing the time-consuming STFT operation and its inverse.
 
-Specifically, we are using the Conv-TasNet[^2] architecture, which is a convolutional network that operates solely in the time domain, but is still able to produce relatively accurate results:
+Specifically, we are using the Conv-TasNet[^2] architecture, which is a convolutional network that operates solely in the time domain (see the appendix for more details), but is still able to produce relatively accurate results:
 
 Raw Audio:
 
@@ -81,8 +80,7 @@ Unmixed Audio:
 <source src="/assets/audio/mixed-sable_est1.wav" type="audio/wav">Your browser does not support the audio element.</audio>
 
 <audio controls>
-<source src="/assets/audio/mixed-sable_est2.wav" type="audio/wav">Your browser does not support the audio element.</audio>
-<br/>
+<source src="/assets/audio/mixed-sable_est2.wav" type="audio/wav">Your browser does not support the audio element.</audio><br/>
 
 The unmixed audio sounds almost perfectly like the original, save for some small artifacts in the left estimation when the speaker says the word "question" (headphones make it easier to hear this artifact). These high accuracy estimations show promise for creating a source separation system.
 
@@ -101,6 +99,9 @@ As of now, we have implemented a multithreaded python program which is able to c
 On the one hand, we plan on investigating traditional reconstruction techniques to see if we can mitigate the choppiness. On the other, we also plan on training a neural network on data of the same length as our chosen chunk size, so that the training data is representative of our testing conditions.
 
 In order to decrease latency, we are looking into the [ONNX standard](https://github.com/onnx/onnx) and [TensorRT](https://developer.nvidia.com/tensorrt), which should better optimize the neural network for fast compuation.
+
+## Appendix: The Architecture of Conv-TasNet
+
 
  
 [^1]: https://www.ee.columbia.edu/~dpwe/papers/Cherry53-cpe.pdf
