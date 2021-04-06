@@ -28,9 +28,12 @@ One such algorithm is **Independent Component Analysis** which requires that the
 In addition, the necessity for multiple microphones makes this algorithm difficult to deploy in practice.
 Watch-- er, listen to what happens when you use ICA with only a single microphone:
 
-Mixture (i.e. the overlapping voices)
+Microphones 1 and 2
 <audio controls>
-<source src="/assets/audio/ICA/mixed-sable.wav" type="audio/wav">Your browser does not support the audio element.</audio>
+<source src="/assets/audio/ICA/mic1.wav" type="audio/wav">Your browser does not support the audio element.</audio>
+
+<audio controls>
+<source src="/assets/audio/ICA/mic2.wav" type="audio/wav">Your browser does not support the audio element.</audio>
 
 Recovered Sources
 <audio controls>
