@@ -11,7 +11,7 @@ You sit across the table from your friend. It's noisy, with many other conversat
 
 ## Cocktail Party Problem
 
-The Cocktail Party Effect is the, "ability for people to focus their auditory attention on one source," whether that be a friend at a party, or a waiter in a restaurant. It has been said that listeners are able to segregate the different audio sources, and tune into one, as opposed to the others[^1]. 
+The Cocktail Party Effect is the "ability for people to focus their auditory attention on one source," whether that be a friend at a party, or a waiter in a restaurant. It has been said that listeners are able to segregate the different audio sources, and tune into one, as opposed to the others[^1]. 
 
 However, the ability to "tune in" to a single voice is highly dependent on a number of features, including speaker pitch, location, rate of speech, and the listener's hearing capability. In other words: different people, when presented with a situation with multiple speakers, will only be able to pick out a selection of the words that are being spoken, and not necessarily only from the speaker of interest.
 
@@ -92,7 +92,17 @@ As of now, we have implemented a multithreaded python program which is able to c
 On the one hand, we plan on investigating traditional reconstruction techniques to see if we can mitigate the choppiness. On the other, we also plan on training a neural network on data of the same length as our chosen chunk size, so that the training data is representative of our testing conditions.
 
 In order to decrease latency, we are looking into the [ONNX standard](https://github.com/onnx/onnx) and [TensorRT](https://developer.nvidia.com/tensorrt), which should better optimize the neural network for fast compuation.
- 
+
+### Appendix: Conv-TasNet Architecture
+
+Conv-TasNet has three stages: an encoder, a "separation module" which forms the masks, and a decoder. For starters, the encoder convolves the mixture waveform with a number of filters (512 in the original authors' implementation).
+
+Moving onto the separation module, we note that it is the \\(T \times \text{enc\_dim}\\) encoding that is being masked, not the \\(T \times 1\\) signal, making the use of the term "mask" in this paper somewhat unconventional. As for how the masks are created, depthwise separable convolutions are used to form one \\(T \times \text{enc\_dim}\\) mask for each source, and the convolutions use exponentially increasing dilation factors to detect both short-term and long-term dependencies.
+
+Lastly, the decoder performs a transposed convolution on each masked encoding, resulting in the separated sources, each with the same shape as the mixture waveform.
+
+As for training, Conv-TasNet's objective is to maximize Si-SDR.
+
 [^1]: https://www.ee.columbia.edu/~dpwe/papers/Cherry53-cpe.pdf
 
 [^2]: https://arxiv.org/pdf/1809.07454.pdf
