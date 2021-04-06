@@ -17,9 +17,7 @@ Moreover, if a person only has one functional ear, or is hard of hearing, the ta
 
 So what if there were ways that we could make a device that could 'tune out' conflicting voices, listening only to the speaker of interest? Such a device would not only have to be able separate voices from a mixture, but also do it in a semi-real time fashion in order for it to be useful in a restaurant setting. Let's look more at ways to accomplish that first requirement.
 
-## Separating Voice Mixtures
-
-### Blind Source Separation
+## Blind Source Separation
 
 The traditional way to separate voices from a mixture is Blind Source Separation (BSS). "Blind" refers to the fact that the process by which the voices were mixed is unknown. BSS algorithms assume properties of the signal sources and the mixing processes and use those assumptions to try to reconstruct the original audio.
 
@@ -30,7 +28,7 @@ Watch-- er, listen to what happens when you use ICA with only a single microphon
 
 Mixture (i.e. the overlapping voices)
 <audio controls>
-<source src="/assets/audio/ICA/mix.wav" type="audio/wav">Your browser does not support the audio element.</audio>
+<source src="/assets/audio/ICA/mixed-sable.wav" type="audio/wav">Your browser does not support the audio element.</audio>
 
 Recovered Sources
 <audio controls>
@@ -41,13 +39,13 @@ Recovered Sources
 
 Evidently, not much unmixing was done.
 
-### Neural Networks for Audio Separation
+## Neural Networks for Audio Separation
 
 Artificial Neural Networks, or also referred to as neural networks, have proven to be very useful in a wide variety of tasks, including source separation. Neural networks, using large amounts of training data, can capture complex relationships that can be used for inference. In the case of source separation, a neural network can characterize how much of each audio slice belongs to each speaker.
 
 Neural networks are not limited in the same way that BSS methods like ICA are - so long as the training data are representative of the testing data, there are fewer limitations on the properties of the original sources or the mixture.
 
-> #### Aside: Spectrograms
+> ### Aside: Spectrograms
 > A commonly used tool in the field of audio processing is the **spectrogram**, which is a 2D representation of an audio signal, generated using a Short Time Fourier Transform (STFT) with frequencies on one axis and time on another. The intensity of each 'pixel' represents the intensity of a frequency at any given time. Conventional wisdom was always that spectrograms are _vital_ tools for source separation, as intuitively, separating the frequencies should assist with the separation.
 >
 > However, in recent literature, it was found that neural networks could achieve very accurate results without performing the time-consuming STFT operation and its inverse.
