@@ -1,6 +1,8 @@
 ---
 layout: default
 ---
+<img class="top-image" src="assets/images/cocktail.webp"> 
+
 Imagine walking into a crowded, noisy restaurant - 
 
 Well, these are still quarantine times, so this type of scenario is less common, but presumably, when life returns to normal such a scenario could occur.
