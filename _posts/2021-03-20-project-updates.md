@@ -45,6 +45,7 @@ Recovered Sources
 
 <audio controls>
 <source src="/assets/audio/ICA/recon_source_2.wav" type="audio/wav">Your browser does not support the audio element.</audio>
+<br/>
 
 In conclusion, not much unmixing was done.
 
@@ -81,7 +82,7 @@ Unmixed Audio:
 
 <audio controls>
 <source src="/assets/audio/mixed-sable_est2.wav" type="audio/wav">Your browser does not support the audio element.</audio>
-
+<br/>
 
 The unmixed audio sounds almost perfectly like the original, save for some small artifacts in the left estimation when the speaker says the word "question" (headphones make it easier to hear this artifact). These high accuracy estimations show promise for creating a source separation system.
 
