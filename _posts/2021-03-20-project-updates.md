@@ -102,7 +102,7 @@ In order to decrease latency, we are looking into the [ONNX standard](https://gi
 
 ## Appendix: The Architecture of Conv-TasNet
 
-
+$(T \times \text{enc\_dim})$
  
 [^1]: https://www.ee.columbia.edu/~dpwe/papers/Cherry53-cpe.pdf
 
