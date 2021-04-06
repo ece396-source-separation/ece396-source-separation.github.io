@@ -1,5 +1,5 @@
 ---
-title: "Mid-Semester Project Updates"
+title: "A Mid Semester Project Update"
 excerpt: "Reaching Delayed Source Separation"
 header:
   overlay_image: /assets/images/Cocktail-party.webp
