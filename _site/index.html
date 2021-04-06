@@ -16,15 +16,20 @@
 
 <p>Imagine walking into a crowded, noisy restaurant -</p>
 
-<p>Well, these are still quarantine times, so this type of scenario is less common, but presumably, when life returns to normal such a scenario could occur.</p>
+<p>Well, these are still quarantine times, so this type of scenario is less common, but presumably, when life returns to normal, such a scenario could occur.</p>
 
-<p>You sit across the table from your friend. It’s noisy, with many other conversations going on around you, making it rather difficult to hear what she is saying.</p>
+<p>You sit across the table from your friend. It’s noisy, with many other conversations going on around you, making it difficult to hear what she is saying.</p>
 
 <h2 id="cocktail-party-problem">Cocktail Party Problem</h2>
 
-<p>The Cocktail Party Effect is the, “ability for people to focus their auditory attention on one source,” whether that be a friend at a party, or a waiter in a restaurant. It has been said that listeners are able to segregate the different audio sources, and tune into one, as opposed to the others<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote">1</a></sup>.</p>
+<p>The Cocktail Party Effect is the, “ability for people to focus their auditory attention on one source,” whether that be a friend at a party, or a waiter in a restaurant. It has been said that listeners are able to listen to mixed audio from many sources, and pick out individual audio sources<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote">1</a></sup>.</p>
 
-<p>However, the ability to “tune in” to a single voice is highly dependent on a number of features, including speaker pitch, location, rate of speech, and the listener’s hearing capability. In other words: different people, when presented with a situation with multiple speakers, will only be able to pick out a selection of the words that are being spoken, and not necessarily only from the speaker of interest.</p>
+<figure class="image">
+    <img src="assets/images/shadowing.png" alt="Shadowing, a dichotic listening experiment, presents a participant with two different audio messages, and asks the participant to focus on one of the messages and repeat it aloud as a way of measuring perceptual ability." />
+    <figcaption>Shadowing, a dichotic listening experiment, presents a participant with two different audio messages, and asks the participant to focus on one of the messages and repeat it aloud as a way of measuring perceptual ability.</figcaption>
+</figure>
+
+<p>The ability to “tune in” to a single voice is highly dependent on a number of features, including speaker pitch, location, rate of speech, and the listener’s hearing capability. In other words: different people, when presented with a situation with multiple speakers, will only be able to pick out a selection of the words that are being spoken, and not necessarily only from the speaker of interest.</p>
 
 <p>Moreover, if a person only has one functional ear, or is hard of hearing, the task becomes even more difficult: with only one ear, it is difficult to determine locality of the speaker, and when hard of hearing, all sounds come through with limited fidelity.</p>
 
@@ -36,12 +41,16 @@
 
 <p>One such algorithm is <strong>Independent Component Analysis</strong> which requires that there are at least as many microphones as there are voices in the mixture, and relies on the assumption that the signals are non-Gaussian and independent, which are not necessarily always true.</p>
 
-<p>In addition, the necessity for multiple microphones makes this algorithm difficult to deploy in practice.
-Watch– er, listen to what happens when you use ICA with only a single microphone:</p>
+<p>In addition, the necessity for multiple microphones makes this algorithm difficult to deploy in practice.</p>
 
-<p>Mixture (i.e. the overlapping voices)</p>
+<p>Let’s see – erm, listen to what happens when we use ICA:</p>
+
+<p>Microphones 1 and 2</p>
 <audio controls="">
-<source src="/assets/audio/ICA/mixed-sable.wav" type="audio/wav" />Your browser does not support the audio element.</audio>
+<source src="/assets/audio/ICA/mic1.wav" type="audio/wav" />Your browser does not support the audio element.</audio>
+
+<audio controls="">
+<source src="/assets/audio/ICA/mic2.wav" type="audio/wav" />Your browser does not support the audio element.</audio>
 
 <p>Recovered Sources</p>
 <audio controls="">
@@ -101,10 +110,6 @@ Watch– er, listen to what happens when you use ICA with only a single micropho
 <h3 id="results-and-next-steps">Results and Next Steps</h3>
 
 <p>As of now, we have implemented a multithreaded python program which is able to chunk the data and process it through the neural network; however, the program has a reconstruction error that results in choppy sounding audio. The effects of this reconstruction error can be mitigated by increasing the chunk size, but that in turn increases latency.</p>
-
-<blockquote>
-  <p>To Be populated in with audio files</p>
-</blockquote>
 
 <p>On the one hand, we plan on investigating traditional reconstruction techniques to see if we can mitigate the choppiness. On the other, we also plan on training a neural network on data of the same length as our chosen chunk size, so that the training data is representative of our testing conditions.</p>
 

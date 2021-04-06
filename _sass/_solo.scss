@@ -162,3 +162,12 @@ html {
     height: auto;
     -ms-interpolation-mode: bicubic;
   }
+
+  figcaption {
+    color: black;
+    font-style: italic;
+    font-size: 0.75em;
+    padding: 0.5em 0.5em 2em 0.5em;
+  }
+
+  /*top right bottom left*/
