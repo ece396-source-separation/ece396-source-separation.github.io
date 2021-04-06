@@ -43,11 +43,10 @@ Recovered Sources
 <audio controls>
 <source src="/assets/audio/ICA/recon_source_1.wav" type="audio/wav">Your browser does not support the audio element.</audio>
 
-Recovered Sources
 <audio controls>
 <source src="/assets/audio/ICA/recon_source_2.wav" type="audio/wav">Your browser does not support the audio element.</audio>
 
-Not much unmixing was done.
+In conclusion, not much unmixing was done.
 
 ## Neural Networks for Audio Separation
 
