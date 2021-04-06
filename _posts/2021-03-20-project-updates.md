@@ -80,13 +80,24 @@ Some options for decreasing latency include: multithreading the python code, so 
 
 As of now, we have implemented a multithreaded python program which is able to chunk the data and process it through the neural network; however, the program has a reconstruction error that results in choppy sounding audio. The effects of this reconstruction error can be mitigated by increasing the chunk size, but that in turn increases latency. 
 
+We are working to implement everything on the Jetson Nano, as its small size makes it closer to the goal of being used by someone seeking portable real-time source separation.
+
 > To Be populated in with audio files
 
 On the one hand, we plan on investigating traditional reconstruction techniques to see if we can mitigate the choppiness. On the other, we also plan on training a neural network on data of the same length as our chosen chunk size, so that the training data is representative of our testing conditions.
 
 In order to decrease latency, we are looking into the [ONNX standard](https://github.com/onnx/onnx) and [TensorRT](https://developer.nvidia.com/tensorrt), which should better optimize the neural network for fast compuation.
 
- 
+## Appendix
+
+The authors of the Conv-TasNet paper propose a three-stage design: an encoder, a "separation module" which forms the masks, and a decoder. For starters, the encoder convolves the mixture waveform with a number of filters (512 in the author's implementation).
+
+Moving onto the separation module, we note that it is the $(T \times \text{enc\_dim})$ encoding that is being masked, not the $(T \times 1)$ signal, making the use of the term "mask" in this paper somewhat unconventional. As for how the masks are created, depthwise separable convolutions are used to form one $(T \times \text{enc\_dim})$ mask for each source, and the convolutions use exponentially increasing dilation factors to detect both short-term and long-term dependencies.
+
+Lastly, the decoder performs a transposed convolution on each masked encoding, resulting in the separated sources, each with the same shape as the mixture waveform.
+
+As for training, Conv-TasNet's objective is to maximize the Si-SDR, as described in the Background Knowledge section of this paper.
+
 [^1]: https://www.ee.columbia.edu/~dpwe/papers/Cherry53-cpe.pdf
 
 [^2]: https://arxiv.org/pdf/1809.07454.pdf
