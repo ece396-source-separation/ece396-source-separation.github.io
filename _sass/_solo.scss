@@ -34,6 +34,7 @@ html {
     line-height: 1;
     color: #111;
     text-rendering: optimizeLegibility;
+    border-bottom:1px solid #CCC;
   }
   
   h1 {
@@ -147,4 +148,10 @@ html {
     max-width: 30rem;
     margin: 0 auto;
     padding: 0 1rem;
+  }
+
+  .top-image {
+    width: 100%;
+    height: auto;
+    -ms-interpolation-mode: bicubic;
   }
