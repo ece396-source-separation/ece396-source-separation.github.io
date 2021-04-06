@@ -37,14 +37,14 @@ html {
   }
   
   h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
   }
   
   @media (min-width: 30rem) {
     h1 {
-      font-size: 3rem;
-      margin-bottom: 3rem;
+      font-size: 2.5rem;
+      margin-bottom: 2.5rem;
     }
   }
   
@@ -53,22 +53,22 @@ html {
   }
   
   h2 {
-    margin-top: 2rem;
-    font-size: 1.25rem;
-    margin-bottom: 0.75rem;
+    margin-top: 1.5rem;
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
   }
   
   @media (min-width: 30rem) {
     h2 {
-      margin-top: 2.5rem;
-      font-size: 1.5rem;
+      margin-top: 2rem;
+      font-size: 1rem;
       margin-bottom: 1rem;
     }
   }
   
   h3, h4, h5, h6 {
-    margin-top: 1.5rem;
-    font-size: 1rem;
+    margin-top: 1rem;
+    font-size: 0.5rem;
     text-transform: uppercase;
   }
   
