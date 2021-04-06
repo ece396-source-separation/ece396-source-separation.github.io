@@ -97,6 +97,6 @@ On the one hand, we plan on investigating traditional reconstruction techniques 
 
 In order to decrease latency, we are looking into the [ONNX standard](https://github.com/onnx/onnx) and [TensorRT](https://developer.nvidia.com/tensorrt), which should better optimize the neural network for fast compuation.
  
-[^1]: https://www.ee.columbia.edu/~dpwe/papers/Cherry53-cpe.pdf
+[^1]: [Edward Colin Cherry's Experiments](https://www.ee.columbia.edu/~dpwe/papers/Cherry53-cpe.pdf)
 
-[^2]: https://arxiv.org/pdf/1809.07454.pdf
+[^2]: [Conv-TasNet by Luo et al.](https://arxiv.org/pdf/1809.07454.pdf)
