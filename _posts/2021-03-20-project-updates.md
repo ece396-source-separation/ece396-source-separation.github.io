@@ -33,6 +33,21 @@ The traditional way to separate voices from a mixture is Blind Source Separation
 One such algorithm is **Independent Component Analysis** which requires that there are at least as many microphones as there are voices in the mixture, and relies on the assumption that the signals are non-Gaussian and independent, which are not necessarily always true.
 
 In addition, the necessity for multiple microphones makes this algorithm difficult to deploy in practice.
+Watch-- er, listen to what happens when you use ICA with only a single microphone:
+
+Mixture (i.e. the overlapping voices)
+<audio controls>
+<source src="/assets/audio/ICA/mixed-sable.wav" type="audio/wav">Your browser does not support the audio element.</audio>
+
+Recovered Sources
+<audio controls>
+<source src="/assets/audio/ICA/recon_source_1.wav" type="audio/wav">Your browser does not support the audio element.</audio>
+
+Recovered Sources
+<audio controls>
+<source src="/assets/audio/ICA/recon_source_2.wav" type="audio/wav">Your browser does not support the audio element.</audio>
+
+Not much unmixing was done.
 
 ## Neural Networks for Audio Separation
 
