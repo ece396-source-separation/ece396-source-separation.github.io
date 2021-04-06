@@ -33,10 +33,10 @@ Let us try an example of ICA to demonstrate this.
 
 Microphones 1 and 2
 <audio controls>
-<source src="assets/audio/ICA/mic1.wav" type="audio/wav">Your browser does not support the audio element.</audio>
+<source src="assets/audio/ICA/mic_1.wav" type="audio/wav">Your browser does not support the audio element.</audio>
 
 <audio controls>
-<source src="assets/audio/ICA/mic2.wav" type="audio/wav">Your browser does not support the audio element.</audio>
+<source src="assets/audio/ICA/mic_2.wav" type="audio/wav">Your browser does not support the audio element.</audio>
 
 Recovered Sources
 <audio controls>
