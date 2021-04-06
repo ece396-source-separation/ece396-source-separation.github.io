@@ -21,24 +21,26 @@ So what if there was a way that we could make a device that could 'tune out' con
 
 Let's start by looking into ways to accomplish voice separation.
 
-## Blind Source Separation
+## Separating Voice Mixtures
+
+### Blind Source Separation
 
 The traditional way to separate voices from a mixture is Blind Source Separation (BSS). "Blind" refers to the fact that the process by which the voices were mixed is unknown. BSS algorithms assume properties of the signal sources and the mixing processes, and then they use those assumptions to try to reconstruct the original audio.
 
 One such algorithm is **Independent Component Analysis**, which requires that there are at least as many microphones as there are voices in the mixture, and relies on the assumption that the signals are non-Gaussian and independent.
 
-The necessity for multiple microphones make this algorithm particularly tricky, as the location of the mics and the hardware they are connected to can introduce phase delays that prevent the final audio samples from aligning properly.
+The necessity for multiple microphones makes this algorithm particularly tricky, as the location of the mics and the hardware they are connected to can introduce phase delays that prevent the final audio samples from aligning properly.
 
 Let us try an example of ICA to demonstrate this.
 
-Microphones 1 and 2
+Microphones 1 and 2:
 <audio controls>
 <source src="assets/audio/ICA/mic_1.wav" type="audio/wav">Your browser does not support the audio element.</audio>
 
 <audio controls>
 <source src="assets/audio/ICA/mic_2.wav" type="audio/wav">Your browser does not support the audio element.</audio>
 
-Recovered Sources
+Recovered Sources:
 <audio controls>
 <source src="assets/audio/ICA/recon_source_1.wav" type="audio/wav">Your browser does not support the audio element.</audio>
 
@@ -53,14 +55,19 @@ Artificial Neural Networks, or also referred to as neural networks, have proven 
 
 Neural networks are not limited in the same way that BSS methods like ICA are - so long as the training data are representative of the testing data, there are fewer limitations on the properties of the original sources or the mixture.
 
-> ### Aside: Spectrograms
-> A commonly used tool in the field of audio processing is the **spectrogram**, which is a 2D representation of an audio signal, generated using a Short Time Fourier Transform (STFT) with frequencies on one axis and time on another. The intensity of each 'pixel' represents the intensity of a frequency at any given time. Conventional wisdom was always that spectrograms are _vital_ tools for source separation, as intuitively, separating the frequencies should assist with the separation.
+>### _Aside: Spectrograms_
+><img class="top-image" src="assets/images/spec.png">
+>
+>A commonly used tool in the field of audio processing is the **spectrogram**, which is a 2D representation of an audio signal, generated using a Short Time Fourier Transform (STFT) with frequencies on one axis and time on the other. The color of each 'pixel' represents the intensity of a frequency at any given time. This transform allows us to see the indicidual frequency components of an sound clip. Conventional wisdom always said that spectrograms are _vital_ tools for source separation, as intuitively, separating the frequencies should assist with the separation process.
 >
 > However, in recent literature, it was found that neural networks could achieve very accurate results without performing the time-consuming STFT operation and its inverse.
 
-Specifically, we are using the Conv-TasNet[^2] architecture, which is a convolutional network that operates solely in the time domain (see the appendix for more details), but is still able to produce relatively accurate results:
 
-Raw Audio:
+We are using the _Convolutional Time Domain Audio Separation Network_ (Conv-TasNet)[^2] architecture, which is a network that operates solely in the time domain (see the appendix for more details), but is still able to produce relatively accurate results.
+
+Let's look at an example of a Conv-TasNet separating audio.
+
+First, the raw audio:
 
 <audio controls>
 <source src="assets/audio/sx98_raw.wav" type="audio/wav">Your browser does not support the audio element.</audio>
@@ -68,12 +75,12 @@ Raw Audio:
 <audio controls>
 <source src="assets/audio/sable_raw.wav" type="audio/wav">Your browser does not support the audio element.</audio>
 
-Mixed Audio:
+Next, we mix the two audio sources together:
 
 <audio controls>
 <source src="assets/audio/mixed-sable.wav" type="audio/wav">Your browser does not support the audio element.</audio>
 
-Unmixed Audio:
+Finally, we can run the audio through the network and denerate two mixtures:
 
 <audio controls>
 <source src="assets/audio/mixed-sable_est1.wav" type="audio/wav">Your browser does not support the audio element.</audio>
@@ -81,9 +88,17 @@ Unmixed Audio:
 <audio controls>
 <source src="assets/audio/mixed-sable_est2.wav" type="audio/wav">Your browser does not support the audio element.</audio><br/>
 
-The unmixed audio sounds almost perfectly like the original, save for some small artifacts in the left estimation when the speaker says the word "question" (headphones make it easier to hear this artifact). These high accuracy estimations show promise for creating a source separation system.
+The unmixed audio sounds very close to the original, save for some small artifacts in the left estimation when the speaker says the word "question" (headphones make it easier to hear this artifact). These high accuracy estimations show great promise for creating a source separation system.
 
-## Real-Time Considerations
+## Hardware and Real-Time Considerations
+
+### Hardware
+
+Generally, neural networks are trained and tested on very powerful computers, which is fine for experimentation. However, in order for a network to be useful 
+
+While basically any processor would be able to run a neural network, the choice of processor.
+
+### Real-Time Considerations
 
 In many fields, real-time performance is a very difficult task, usually requiring each part of the pipeline must be optimized to minimize latency. In the case of source separation, audio collection from the input microphone must be parallelized with the processing on the neural network.
 
@@ -101,6 +116,16 @@ On the one hand, we plan on investigating traditional reconstruction techniques 
 
 In order to decrease latency, we are looking into the [ONNX standard](https://github.com/onnx/onnx) and [TensorRT](https://developer.nvidia.com/tensorrt), which should better optimize the neural network for fast compuation.
  
+## Appendix: Conv-TasNet Architecture
+
+Conv-TasNet has three stages: an encoder, a "separation module" which forms the masks, and a decoder. For starters, the encoder convolves the mixture waveform with a number of filters (512 in the original authors' implementation).
+
+Moving onto the separation module, we note that it is the \\(T \times \text{enc\_dim}\\) encoding that is being masked, not the \\(T \times 1\\) signal, making it somewhat unconventional to call these masks "masks". As for how the masks are created, depthwise separable convolutions are used to form one \\(T \times \text{enc\_dim}\\) mask for each source, and the convolutions use exponentially increasing dilation factors to detect both short-term and long-term dependencies.
+
+Lastly, the decoder performs a transposed convolution on each masked encoding, resulting in the separated sources, each with the same shape as the mixture waveform.
+
+As for training, Conv-TasNet's objective is to maximize the scale-invariant signal-to-distortion ratio for each training example.
+
 [^1]: [Edward Colin Cherry's Experiments](https://www.ee.columbia.edu/~dpwe/papers/Cherry53-cpe.pdf)
 
 [^2]: [Conv-TasNet by Luo et al.](https://arxiv.org/pdf/1809.07454.pdf)
