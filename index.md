@@ -63,7 +63,7 @@ Neural networks are not limited in the same way that BSS methods like ICA are: s
 > However, in recent literature, it was found that neural networks could achieve very accurate results without performing the time-consuming STFT operation and its inverse.
 
 
-We are using the _Convolutional Time Domain Audio Separation Network_ (Conv-TasNet)[^2] architecture, which is a network that operates solely in the time domain (see the appendix for more details), but is still able to produce relatively accurate results. We chose this network because we found it to be a fast neural network archictecture that still produced good results: lower latency of this network makes it more amenable to real time separation, even if the network does not achieve state of the art results.
+We are using the _Convolutional Time Domain Audio Separation Network_ (Conv-TasNet)[^2] architecture, which is a network that operates solely in the time domain (see the appendix for more details), but is still able to produce relatively accurate results. We chose this network because we found it to be a fast neural network architecture that still produced good results. The lower latency of this network makes it more amenable to real time separation, even if the network does not achieve state of the art results.
 
 Let's look at an example of a Conv-TasNet separating audio.
 
