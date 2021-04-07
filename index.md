@@ -13,7 +13,7 @@ You sit across the table from your friend. It's noisy, with many other conversat
 
 The Cocktail Party Effect is the "ability for people to focus their auditory attention on one source,"[^1] whether that be a friend at a party, or a waiter in a restaurant. Humans, in general, are able to listen to mixed audio from many sources, and hone their focus on individual audio sources. 
 
-{% include image.html url="assets/images/shadowing.png" description="Shadowing, a dichotic listening experiment, presents a participant with two different voice messages, and asks the participant to focus on one of the messages and repeat it aloud as a way of measuring perceptual ability." %}
+{% include image.html url="assets/images/shadowing.png" description="Shadowing, a dichotic listening experiment, presents a participant with two different voice messages. The participant is asked to focus on one of the messages and then repeat what they hear aloud as a way of measuring perceptual ability." %}
 
 However, this ability is not perfect: a listener may not necessarily pick up words and sounds only from the speaker of interest. The ability to "tune in" to a single voice is highly dependent on a number of features, including speaker pitch, location, rate of speech, and the listener's hearing capability. If a person only has one functional ear, or is hard of hearing, focusing on a single voice can be very difficult: with only one ear, it is difficult to determine locality of the speaker, and when hard of hearing, all sounds come through with limited fidelity.
 
@@ -25,7 +25,7 @@ Let's start by looking into ways to accomplish voice separation.
 
 ### Blind Source Separation
 
-The traditional way to separate voices from a mixture is Blind Source Separation (BSS). "Blind" refers to the fact that the process by which the voices were mixed is unknown. BSS algorithms assume properties of the signal sources and the mixing processes, and then they use those assumptions to try to reconstruct the original audio.
+The traditional way to separate voices from a mixture is Blind Source Separation (BSS). "Blind" implies that the mixing processes of the voices is unknown. BSS algorithms assume properties of the signal sources and the mixing processes, and then they use those assumptions to try to reconstruct the original audio.
 
 One such algorithm is **Independent Component Analysis**, which requires that there are at least as many microphones as there are voices in the mixture, and relies on the assumption that the signals are non-Gaussian and independent.
 
@@ -53,7 +53,7 @@ Evidently, not much unmixing was done.
 
 Artificial Neural Networks, or also referred to as neural networks, have proven to be very useful in a wide variety of tasks, including source separation. Neural networks, using large amounts of training data, can capture complex relationships that can be used for inference. In the case of source separation, a neural network can characterize how much of each audio slice belongs to each speaker.
 
-Neural networks are not limited in the same way that BSS methods like ICA are: so long as the training data are representative of the testing data, there are fewer limitations on the properties of the original sources or the mixture.
+Neural networks are not limited in the same way that BSS methods like ICA are: the main requirement is that the training data should be representative of the testing data; in other words, there are fewer limitations on the properties of the original sources or the mixture.
 
 >### _Aside: Spectrograms_
 ><img class="top-image" src="assets/images/spec.png">
@@ -116,7 +116,7 @@ Some options for alleviating these issues include:
 
 As of now, we have implemented a multithreaded python program which is able to chunk the data and process it through the neural network. We leverage multiple cores to parallelize audio collection and separation.
 
-It is somewhat difficult to show latency in a demo recording, but on a desktop machine with a dedicated GPU, we are able to reduce the latency down to roughly 700 ms, which is low, but still a very noticeable latency. On the Jetson, we are still experiencing nearly 60 second delay. In addition, the network is unable to process the data faster than it is coming in, resulting in a filling of the input queue, which leads to some dropped audio segments. Our next course of action would be to reduce model complexity to improve separation time (bullet point 2 above).
+It is somewhat difficult to show latency in a demo recording, but on a desktop machine with a dedicated GPU, we are able to reduce the latency down to roughly 700 ms, which is low, but is still a noticeable latency. On the Jetson, we are still experiencing nearly _60 second_ latency, as the network is unable to process audio data fast enough. This also means that eventually, the input queue fills, which leads to some dropped audio segments. Our next course of action would be to reduce model complexity to improve separation time (bullet point 2 above).
 
 Let's hear a sample of a reconstruction performed on the Jetson:
 
@@ -126,7 +126,7 @@ Let's hear a sample of a reconstruction performed on the Jetson:
 <audio controls>
 <source src="assets/audio/jetson/est2.wav" type="audio/wav">Your browser does not support the audio element.</audio><br/>
 
-One issue with the reconstructions is the random assignment of separated audio. The current model we are using was trained to pick the output configuration that yields the optimal results (Permutation Invariant Training), which is fine for normal separation where the model can see the entire audio recording at once. When processing with chunks, however, the model cannot see future or past chunks, so it essentially randomly assigns the separations to one of the reconstructions. Thus, even if the audio separation is working, the reconstructed audio is still very difficult to understand. One method of solving this would be to train the model without the permutation invariance, which is where we are currently investigating.
+One issue with the reconstructions is the random assignment of separated audio. The current model we are using was trained to pick the output configuration that yields the optimal results (Permutation Invariant Training), which is fine for normal separation where the model can see the entire audio recording at once. When processing with chunks, however, the model cannot see future or past chunks, so it essentially randomly assigns the separations to one of the reconstructions. Thus, even if the audio separation is working, the reconstructed audio is still very difficult to understand. One method of solving this would be to train the model without the permutation invariance, which is what we are currently investigating.
  
 ## Appendix: Conv-TasNet Architecture
 
