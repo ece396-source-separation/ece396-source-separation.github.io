@@ -8,13 +8,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="A Senior Project">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Towards Real Time Source Separation</title>
+  <title>Towards Real Time Source Separation on Edge Devices</title>
   <link rel="stylesheet" href="css/main.css">
 
 </head>
 <body>
   <div class="container">
-    <h1>Towards Real Time Source Separation</h1>
+    <h1>Towards Real Time Source Separation on Edge Devices</h1>
     <p><img class="top-image" src="assets/images/cocktail.webp" /></p>
 
 <p>Imagine walking into a crowded, noisy restaurant -</p>
@@ -38,7 +38,9 @@
 
 <p>Let’s start by looking into ways to accomplish voice separation.</p>
 
-<h2 id="blind-source-separation">Blind Source Separation</h2>
+<h2 id="separating-voice-mixtures">Separating Voice Mixtures</h2>
+
+<h3 id="blind-source-separation">Blind Source Separation</h3>
 
 <p>The traditional way to separate voices from a mixture is Blind Source Separation (BSS). “Blind” refers to the fact that the process by which the voices were mixed is unknown. BSS algorithms assume properties of the signal sources and the mixing processes, and then they use those assumptions to try to reconstruct the original audio.</p>
 
@@ -65,22 +67,22 @@
 
 <p>Evidently, not much unmixing was done.</p>
 
-<h2 id="neural-networks-for-audio-separation">Neural Networks for Audio Separation</h2>
+<h3 id="neural-networks-for-audio-separation">Neural Networks for Audio Separation</h3>
 
 <p>Artificial Neural Networks, or also referred to as neural networks, have proven to be very useful in a wide variety of tasks, including source separation. Neural networks, using large amounts of training data, can capture complex relationships that can be used for inference. In the case of source separation, a neural network can characterize how much of each audio slice belongs to each speaker.</p>
 
-<p>Neural networks are not limited in the same way that BSS methods like ICA are - so long as the training data are representative of the testing data, there are fewer limitations on the properties of the original sources or the mixture.</p>
+<p>Neural networks are not limited in the same way that BSS methods like ICA are: so long as the training data are representative of the testing data, there are fewer limitations on the properties of the original sources or the mixture.</p>
 
 <blockquote>
   <h3 id="aside-spectrograms"><em>Aside: Spectrograms</em></h3>
   <p><img class="top-image" src="assets/images/spec.png" /></p>
 
-  <p>A commonly used tool in the field of audio processing is the <strong>spectrogram</strong>, which is a 2D representation of an audio signal, generated using a Short Time Fourier Transform (STFT) with frequencies on one axis and time on the other. The color of each ‘pixel’ represents the intensity of a frequency at any given time. This transform allows us to see the indicidual frequency components of an sound clip. Conventional wisdom always said that spectrograms are <em>vital</em> tools for source separation, as intuitively, separating the frequencies should assist with the separation process.</p>
+  <p>A commonly used tool in the field of audio processing is the <strong>spectrogram</strong>, which is a 2D representation of an audio signal, generated using a Short Time Fourier Transform (STFT) with frequencies on one axis and time on the other. The color of each ‘pixel’ represents the intensity of a frequency at any given time. This transform allows us to see the individual frequency components of an sound clip. Conventional wisdom always said that spectrograms are <em>vital</em> tools for source separation, as intuitively, separating the frequencies should assist with the separation process.</p>
 
   <p>However, in recent literature, it was found that neural networks could achieve very accurate results without performing the time-consuming STFT operation and its inverse.</p>
 </blockquote>
 
-<p>We are using the <em>Convolutional Time Domain Audio Separation Network</em> (Conv-TasNet)<sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote">2</a></sup> architecture, which is a network that operates solely in the time domain (see the appendix for more details), but is still able to produce relatively accurate results.</p>
+<p>We are using the <em>Convolutional Time Domain Audio Separation Network</em> (Conv-TasNet)<sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote">2</a></sup> architecture, which is a network that operates solely in the time domain (see the appendix for more details), but is still able to produce relatively accurate results. We chose this network because we found it to be a fast neural network archictecture that still produced good results: lower latency of this network makes it more amenable to real time separation, even if the network does not achieve state of the art results.</p>
 
 <p>Let’s look at an example of a Conv-TasNet separating audio.</p>
 
@@ -97,7 +99,7 @@
 <audio controls="">
 <source src="assets/audio/mixed-sable.wav" type="audio/wav" />Your browser does not support the audio element.</audio>
 
-<p>Finally, we can run the audio through the network and denerate two mixtures:</p>
+<p>Finally, we can run the audio through the network and generate two mixtures:</p>
 
 <audio controls="">
 <source src="assets/audio/mixed-sable_est1.wav" type="audio/wav" />Your browser does not support the audio element.</audio>
@@ -106,13 +108,19 @@
 <source src="assets/audio/mixed-sable_est2.wav" type="audio/wav" />Your browser does not support the audio element.</audio>
 <p><br /></p>
 
-<p>The unmixed audio sounds very close to the original, save for some small artifacts in the left estimation when the speaker says the word “question” (headphones make it easier to hear this artifact). These high accuracy estimations show great promise for creating a source separation system.</p>
+<p>The unmixed audio sounds very close to the original, save for some small artifacts in the left estimation when the speaker says the word “question” (headphones make it easier to hear this artifact). These high accuracy estimations show great promise for creating a source separation system using Conv-TasNet.</p>
 
-<h2 id="hardware-considerations">Hardware Considerations</h2>
+<h2 id="hardware-latency-trade-offs">Hardware-Latency Trade-offs</h2>
 
-<p>While basically any processor would be able to run</p>
+<p>A large focus in using deep learning for audio source separation lies in achieving the highest accuracy reconstructions. Separation is performed on machines with very powerful graphics cards, and the audio reconstructions are computed very quickly. However, in the field, it is not reasonable to expect that such a computer would be readily available.</p>
 
-<h2 id="real-time-considerations">Real-Time Considerations</h2>
+<p>The trade-off then becomes one of latency and computational speed: a more powerful computer is faster, but is impractical for deployment; a less powerful computer is slower, but more faithful to what would be available in the field.</p>
+
+<p><img class="med-image" src="assets/images/jetson.jpg" /></p>
+
+<p>We chose to focus on deploying a source separation pipeline to the <a href="https://developer.nvidia.com/embedded/jetson-nano-developer-kit">Nvidia Jetson Nano</a>, a single board computer which offers a compromise between computational power and portability. The Jetson Nano is similar to other single board computers like the <a href="https://www.raspberrypi.org/">Raspberry Pi</a>, except it comes with a more powerful on-board GPU that gives it an advantage when performing deep learning computations.</p>
+
+<h3 id="real-time-considerations">Real-Time Considerations</h3>
 
 <p>In many fields, real-time performance is a very difficult task, usually requiring each part of the pipeline must be optimized to minimize latency. In the case of source separation, audio collection from the input microphone must be parallelized with the processing on the neural network.</p>
 
@@ -130,15 +138,15 @@
 
 <p>In order to decrease latency, we are looking into the <a href="https://github.com/onnx/onnx">ONNX standard</a> and <a href="https://developer.nvidia.com/tensorrt">TensorRT</a>, which should better optimize the neural network for fast compuation.</p>
 
-<h3 id="appendix-conv-tasnet-architecture">Appendix: Conv-TasNet Architecture</h3>
+<h2 id="appendix-conv-tasnet-architecture">Appendix: Conv-TasNet Architecture</h2>
 
 <p>Conv-TasNet has three stages: an encoder, a “separation module” which forms the masks, and a decoder. For starters, the encoder convolves the mixture waveform with a number of filters (512 in the original authors’ implementation).</p>
 
-<p>Moving onto the separation module, we note that it is the \(T \times \text{enc_dim}\) encoding that is being masked, not the \(T \times 1\) signal, making the use of the term “mask” in this paper somewhat unconventional. As for how the masks are created, depthwise separable convolutions are used to form one \(T \times \text{enc_dim}\) mask for each source, and the convolutions use exponentially increasing dilation factors to detect both short-term and long-term dependencies.</p>
+<p>Moving onto the separation module, we note that it is the \(T \times \text{enc_dim}\) encoding that is being masked, not the \(T \times 1\) signal, making it somewhat unconventional to call these masks “masks”. As for how the masks are created, depthwise separable convolutions are used to form one \(T \times \text{enc_dim}\) mask for each source, and the convolutions use exponentially increasing dilation factors to detect both short-term and long-term dependencies.</p>
 
 <p>Lastly, the decoder performs a transposed convolution on each masked encoding, resulting in the separated sources, each with the same shape as the mixture waveform.</p>
 
-<p>As for training, Conv-TasNet’s objective is to maximize Si-SDR.</p>
+<p>As for training, Conv-TasNet’s objective is to maximize the scale-invariant signal-to-distortion ratio for each training example.</p>
 
 <div class="footnotes" role="doc-endnotes">
   <ol>

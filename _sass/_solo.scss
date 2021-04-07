@@ -71,7 +71,8 @@ html {
   }
 
   h3 {
-    font-size: 1rem
+    margin-top: 2rem;
+    font-size: 1.15rem
   }
 
   h4, h5, h6 {
@@ -159,6 +160,12 @@ html {
 
   .top-image {
     width: 100%;
+    height: auto;
+    -ms-interpolation-mode: bicubic;
+  }
+
+  .med-image {
+    width: 80%;
     height: auto;
     -ms-interpolation-mode: bicubic;
   }

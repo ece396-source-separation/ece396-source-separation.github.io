@@ -49,21 +49,21 @@ Recovered Sources:
 
 Evidently, not much unmixing was done.
 
-## Neural Networks for Audio Separation
+### Neural Networks for Audio Separation
 
 Artificial Neural Networks, or also referred to as neural networks, have proven to be very useful in a wide variety of tasks, including source separation. Neural networks, using large amounts of training data, can capture complex relationships that can be used for inference. In the case of source separation, a neural network can characterize how much of each audio slice belongs to each speaker.
 
-Neural networks are not limited in the same way that BSS methods like ICA are - so long as the training data are representative of the testing data, there are fewer limitations on the properties of the original sources or the mixture.
+Neural networks are not limited in the same way that BSS methods like ICA are: so long as the training data are representative of the testing data, there are fewer limitations on the properties of the original sources or the mixture.
 
 >### _Aside: Spectrograms_
 ><img class="top-image" src="assets/images/spec.png">
 >
->A commonly used tool in the field of audio processing is the **spectrogram**, which is a 2D representation of an audio signal, generated using a Short Time Fourier Transform (STFT) with frequencies on one axis and time on the other. The color of each 'pixel' represents the intensity of a frequency at any given time. This transform allows us to see the indicidual frequency components of an sound clip. Conventional wisdom always said that spectrograms are _vital_ tools for source separation, as intuitively, separating the frequencies should assist with the separation process.
+>A commonly used tool in the field of audio processing is the **spectrogram**, which is a 2D representation of an audio signal, generated using a Short Time Fourier Transform (STFT) with frequencies on one axis and time on the other. The color of each 'pixel' represents the intensity of a frequency at any given time. This transform allows us to see the individual frequency components of an sound clip. Conventional wisdom always said that spectrograms are _vital_ tools for source separation, as intuitively, separating the frequencies should assist with the separation process.
 >
 > However, in recent literature, it was found that neural networks could achieve very accurate results without performing the time-consuming STFT operation and its inverse.
 
 
-We are using the _Convolutional Time Domain Audio Separation Network_ (Conv-TasNet)[^2] architecture, which is a network that operates solely in the time domain (see the appendix for more details), but is still able to produce relatively accurate results.
+We are using the _Convolutional Time Domain Audio Separation Network_ (Conv-TasNet)[^2] architecture, which is a network that operates solely in the time domain (see the appendix for more details), but is still able to produce relatively accurate results. We chose this network because we found it to be a fast neural network archictecture that still produced good results: lower latency of this network makes it more amenable to real time separation, even if the network does not achieve state of the art results.
 
 Let's look at an example of a Conv-TasNet separating audio.
 
@@ -80,7 +80,7 @@ Next, we mix the two audio sources together:
 <audio controls>
 <source src="assets/audio/mixed-sable.wav" type="audio/wav">Your browser does not support the audio element.</audio>
 
-Finally, we can run the audio through the network and denerate two mixtures:
+Finally, we can run the audio through the network and generate two mixtures:
 
 <audio controls>
 <source src="assets/audio/mixed-sable_est1.wav" type="audio/wav">Your browser does not support the audio element.</audio>
@@ -88,23 +88,30 @@ Finally, we can run the audio through the network and denerate two mixtures:
 <audio controls>
 <source src="assets/audio/mixed-sable_est2.wav" type="audio/wav">Your browser does not support the audio element.</audio><br/>
 
-The unmixed audio sounds very close to the original, save for some small artifacts in the left estimation when the speaker says the word "question" (headphones make it easier to hear this artifact). These high accuracy estimations show great promise for creating a source separation system.
+The unmixed audio sounds very close to the original, save for some small artifacts in the left estimation when the speaker says the word "question" (headphones make it easier to hear this artifact). These high accuracy estimations show great promise for creating a source separation system using Conv-TasNet.
 
-## Hardware and Real-Time Considerations
+## Hardware and Real Time Considerations
 
 ### Hardware
 
-Generally, neural networks are trained and tested on very powerful computers, which is fine for experimentation. However, in order for a network to be useful 
+A large focus in using deep learning for audio source separation lies in achieving the highest accuracy reconstructions. Separation is performed on machines with very powerful graphics cards, and the audio reconstructions are computed very quickly. However, in the field, it is not reasonable to expect that such a computer would be readily available.
 
-While basically any processor would be able to run a neural network, the choice of processor.
+The trade-off then becomes one of latency and computational speed: a more powerful computer is faster, but is impractical for deployment; a less powerful computer is slower, but more faithful to what would be available in the field.
 
-### Real-Time Considerations
+<img class="med-image" src="assets/images/jetson.jpg">
 
-In many fields, real-time performance is a very difficult task, usually requiring each part of the pipeline must be optimized to minimize latency. In the case of source separation, audio collection from the input microphone must be parallelized with the processing on the neural network.
+We chose to focus on deploying a source separation pipeline to the [Nvidia Jetson Nano](https://developer.nvidia.com/embedded/jetson-nano-developer-kit), a single board computer which offers a compromise between computational power and portability. The Jetson Nano is similar to other single board computers like the [Raspberry Pi](https://www.raspberrypi.org/), except it comes with a more powerful on-board GPU that gives it an advantage when performing deep learning computations.
 
-In the case of Conv-TasNet and other contemporary neural network architectures, the data must be divided into chunks for processing However, if the neural network cannot process the input audio faster than it is coming in, the latency will accumulate for every chunk and result in completely non-synced output. In essence, this becomes a [producer-consumer problem](https://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem).
+### Real Time Considerations
 
-##
+In many fields, real-time performance is a very difficult task, requiring each part of the input pipeline to be optimized to minimize latency. In the case of Conv-TasNet, the network relies on contextual data to perform separation, meaning it must operate on chunks of audio data. This means that even if the network performed inference instantaneously, there would still be a time delay of the chunk size at the output. Moreover, if the neural network cannot process the input audio faster than it is coming in, the latency will accumulate for every chunk and result in completely non-synced output. In essence, this becomes a [producer-consumer problem](https://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem).
+
+Some options for alleviating these issues include:
+
+ 1. Using multiple processor cores to parallelize audio collection and neural network computation. This optimization is almost essential to prevent gaps in the recorded audio.
+ 2. Using optimization frameworks such as [TensorRT](https://developer.nvidia.com/tensorrt) to reduce model completexity and quantizing 
+ 3.  
+ , using optimized frameworks for the Jetson Nano 
 
 Some options for decreasing latency include: multithreading the python code, so audio can be recorded while the neural network performs computations, truncating the floating point precision to improve speed, and using a faster language, such as C++. We are currently in the process of experimenting with these optimizations.
 
