@@ -109,15 +109,14 @@ In many fields, real-time performance is a very difficult task, requiring each p
 Some options for alleviating these issues include:
 
  1. Using multiple processor cores to parallelize audio collection and neural network computation. This optimization is almost essential to prevent gaps in the recorded audio.
- 2. Using optimization frameworks such as [TensorRT](https://developer.nvidia.com/tensorrt) to reduce model completexity and quantizing 
- 3.  
- , using optimized frameworks for the Jetson Nano 
-
-Some options for decreasing latency include: multithreading the python code, so audio can be recorded while the neural network performs computations, truncating the floating point precision to improve speed, and using a faster language, such as C++. We are currently in the process of experimenting with these optimizations.
+ 2. Using optimization frameworks such as [TensorRT](https://developer.nvidia.com/tensorrt) to reduce model complexity and reduce the precision of the network weights.
+ 3. Using a language faster than python, such as C++.
 
 ### Results and Next Steps
 
-As of now, we have implemented a multithreaded python program which is able to chunk the data and process it through the neural network; however, the program has a reconstruction error that results in choppy sounding audio. The effects of this reconstruction error can be mitigated by increasing the chunk size, but that in turn increases latency. 
+As of now, we have implemented a multithreaded python program which is able to chunk the data and process it through the neural network. We leverage multiple cores to parallelize audio collection and separation. 
+
+however, the program has a reconstruction error that results in choppy sounding audio. The effects of this reconstruction error can be mitigated by increasing the chunk size, but that in turn increases latency. 
 
 On the one hand, we plan on investigating traditional reconstruction techniques to see if we can mitigate the choppiness. On the other, we also plan on training a neural network on data of the same length as our chosen chunk size, so that the training data is representative of our testing conditions.
 
