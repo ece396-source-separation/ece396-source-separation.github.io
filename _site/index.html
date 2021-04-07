@@ -89,28 +89,30 @@
 <p>First, the raw audio:</p>
 
 <audio controls="">
-<source src="assets/audio/sx98_raw.wav" type="audio/wav" />Your browser does not support the audio element.</audio>
+<source src="assets/audio/conv-tasnet/adam-savage.wav" type="audio/wav" />Your browser does not support the audio element.</audio>
 
 <audio controls="">
-<source src="assets/audio/sable_raw.wav" type="audio/wav" />Your browser does not support the audio element.</audio>
+<source src="assets/audio/conv-tasnet/sable.wav" type="audio/wav" />Your browser does not support the audio element.</audio>
 
 <p>Next, we mix the two audio sources together:</p>
 
 <audio controls="">
-<source src="assets/audio/mixed-sable.wav" type="audio/wav" />Your browser does not support the audio element.</audio>
+<source src="assets/audio/conv-tasnet/mix.wav" type="audio/wav" />Your browser does not support the audio element.</audio>
 
 <p>Finally, we can run the audio through the network and generate two mixtures:</p>
 
 <audio controls="">
-<source src="assets/audio/mixed-sable_est1.wav" type="audio/wav" />Your browser does not support the audio element.</audio>
+<source src="assets/audio/conv-tasnet/est1.wav" type="audio/wav" />Your browser does not support the audio element.</audio>
 
 <audio controls="">
-<source src="assets/audio/mixed-sable_est2.wav" type="audio/wav" />Your browser does not support the audio element.</audio>
+<source src="assets/audio/conv-tasnet/est2.wav" type="audio/wav" />Your browser does not support the audio element.</audio>
 <p><br /></p>
 
 <p>The unmixed audio sounds very close to the original, save for some small artifacts in the left estimation when the speaker says the word “question” (headphones make it easier to hear this artifact). These high accuracy estimations show great promise for creating a source separation system using Conv-TasNet.</p>
 
-<h2 id="hardware-latency-trade-offs">Hardware-Latency Trade-offs</h2>
+<h2 id="hardware-and-real-time-considerations">Hardware and Real Time Considerations</h2>
+
+<h3 id="hardware">Hardware</h3>
 
 <p>A large focus in using deep learning for audio source separation lies in achieving the highest accuracy reconstructions. Separation is performed on machines with very powerful graphics cards, and the audio reconstructions are computed very quickly. However, in the field, it is not reasonable to expect that such a computer would be readily available.</p>
 
@@ -120,19 +122,23 @@
 
 <p>We chose to focus on deploying a source separation pipeline to the <a href="https://developer.nvidia.com/embedded/jetson-nano-developer-kit">Nvidia Jetson Nano</a>, a single board computer which offers a compromise between computational power and portability. The Jetson Nano is similar to other single board computers like the <a href="https://www.raspberrypi.org/">Raspberry Pi</a>, except it comes with a more powerful on-board GPU that gives it an advantage when performing deep learning computations.</p>
 
-<h3 id="real-time-considerations">Real-Time Considerations</h3>
+<h3 id="real-time-considerations">Real Time Considerations</h3>
 
-<p>In many fields, real-time performance is a very difficult task, usually requiring each part of the pipeline must be optimized to minimize latency. In the case of source separation, audio collection from the input microphone must be parallelized with the processing on the neural network.</p>
+<p>In many fields, real-time performance is a very difficult task, requiring each part of the input pipeline to be optimized to minimize latency. In the case of Conv-TasNet, the network relies on contextual data to perform separation, meaning it must operate on chunks of audio data. This means that even if the network performed inference instantaneously, there would still be a time delay of the chunk size at the output. Moreover, if the neural network cannot process the input audio faster than it is coming in, the latency will accumulate for every chunk and result in completely non-synced output. In essence, this becomes a <a href="https://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem">producer-consumer problem</a>.</p>
 
-<p>In the case of Conv-TasNet and other contemporary neural network architectures, the data must be divided into chunks for processing However, if the neural network cannot process the input audio faster than it is coming in, the latency will accumulate for every chunk and result in completely non-synced output. In essence, this becomes a <a href="https://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem">producer-consumer problem</a>.</p>
+<p>Some options for alleviating these issues include:</p>
 
-<p>##</p>
-
-<p>Some options for decreasing latency include: multithreading the python code, so audio can be recorded while the neural network performs computations, truncating the floating point precision to improve speed, and using a faster language, such as C++. We are currently in the process of experimenting with these optimizations.</p>
+<ol>
+  <li>Using multiple processor cores to parallelize audio collection and neural network computation. This optimization is almost essential to prevent gaps in the recorded audio.</li>
+  <li>Using optimization frameworks such as <a href="https://developer.nvidia.com/tensorrt">TensorRT</a> to reduce model complexity and reduce the precision of the network weights.</li>
+  <li>Using a language faster than python, such as C++.</li>
+</ol>
 
 <h3 id="results-and-next-steps">Results and Next Steps</h3>
 
-<p>As of now, we have implemented a multithreaded python program which is able to chunk the data and process it through the neural network; however, the program has a reconstruction error that results in choppy sounding audio. The effects of this reconstruction error can be mitigated by increasing the chunk size, but that in turn increases latency.</p>
+<p>As of now, we have implemented a multithreaded python program which is able to chunk the data and process it through the neural network. We leverage multiple cores to parallelize audio collection and separation.</p>
+
+<p>however, the program has a reconstruction error that results in choppy sounding audio. The effects of this reconstruction error can be mitigated by increasing the chunk size, but that in turn increases latency.</p>
 
 <p>On the one hand, we plan on investigating traditional reconstruction techniques to see if we can mitigate the choppiness. On the other, we also plan on training a neural network on data of the same length as our chosen chunk size, so that the training data is representative of our testing conditions.</p>
 

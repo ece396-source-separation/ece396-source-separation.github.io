@@ -70,25 +70,25 @@ Let's look at an example of a Conv-TasNet separating audio.
 First, the raw audio:
 
 <audio controls>
-<source src="assets/audio/sx98_raw.wav" type="audio/wav">Your browser does not support the audio element.</audio>
+<source src="assets/audio/conv-tasnet/adam-savage.wav" type="audio/wav">Your browser does not support the audio element.</audio>
 
 <audio controls>
-<source src="assets/audio/sable_raw.wav" type="audio/wav">Your browser does not support the audio element.</audio>
+<source src="assets/audio/conv-tasnet/sable.wav" type="audio/wav">Your browser does not support the audio element.</audio>
 
 Next, we mix the two audio sources together:
 
 <audio controls>
-<source src="assets/audio/mixed-sable.wav" type="audio/wav">Your browser does not support the audio element.</audio>
+<source src="assets/audio/conv-tasnet/mix.wav" type="audio/wav">Your browser does not support the audio element.</audio>
 
 Finally, we can run the audio through the network and generate two mixtures:
 
 <audio controls>
-<source src="assets/audio/mixed-sable_est1.wav" type="audio/wav">Your browser does not support the audio element.</audio>
+<source src="assets/audio/conv-tasnet/est1.wav" type="audio/wav">Your browser does not support the audio element.</audio>
 
 <audio controls>
-<source src="assets/audio/mixed-sable_est2.wav" type="audio/wav">Your browser does not support the audio element.</audio><br/>
+<source src="assets/audio/conv-tasnet/est2.wav" type="audio/wav">Your browser does not support the audio element.</audio><br/>
 
-The unmixed audio sounds very close to the original, save for some small artifacts in the left estimation when the speaker says the word "question" (headphones make it easier to hear this artifact). These high accuracy estimations show great promise for creating a source separation system using Conv-TasNet.
+The unmixed audio sounds relatively close to the original, but there are some artifacts still present in the beginning of the estimation on the right. However, the relatively clean results show that this network is a viable choice for source separation.
 
 ## Hardware and Real Time Considerations
 
@@ -104,7 +104,7 @@ We chose to focus on deploying a source separation pipeline to the [Nvidia Jetso
 
 ### Real Time Considerations
 
-In many fields, real-time performance is a very difficult task, requiring each part of the input pipeline to be optimized to minimize latency. In the case of Conv-TasNet, the network relies on contextual data to perform separation, meaning it must operate on chunks of audio data. This means that even if the network performed inference instantaneously, there would still be a time delay of the chunk size at the output. Moreover, if the neural network cannot process the input audio faster than it is coming in, the latency will accumulate for every chunk and result in completely non-synced output. In essence, this becomes a [producer-consumer problem](https://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem).
+In many fields, real time performance is a very difficult task, requiring each part of the input pipeline to be optimized to minimize latency. In the case of Conv-TasNet, the network relies on contextual data to perform separation, meaning it must operate on chunks of audio data to operate in real time. This means that even if the network performed inference instantaneously, there would still be a time delay of the chunk size at the output. Moreover, if the neural network cannot process the input audio faster than it is coming in, the latency will accumulate for every chunk and result in completely non-synced output. In essence, this becomes a [producer-consumer problem](https://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem).
 
 Some options for alleviating these issues include:
 
@@ -114,13 +114,19 @@ Some options for alleviating these issues include:
 
 ### Results and Next Steps
 
-As of now, we have implemented a multithreaded python program which is able to chunk the data and process it through the neural network. We leverage multiple cores to parallelize audio collection and separation. 
+As of now, we have implemented a multithreaded python program which is able to chunk the data and process it through the neural network. We leverage multiple cores to parallelize audio collection and separation.
 
-however, the program has a reconstruction error that results in choppy sounding audio. The effects of this reconstruction error can be mitigated by increasing the chunk size, but that in turn increases latency. 
+It is somewhat difficult to show latency in a demo recording, but on a desktop machine with a dedicated GPU, we are able to reduce the latency down to roughly 700 ms, which is low, but still a very noticeable latency. On the Jetson, we are still experiencing nearly 60 second delay. In addition, the network is unable to process the data faster than it is coming in, resulting in a filling of the input queue, which leads to some dropped audio segments. Our next course of action would be to reduce model complexity to improve separation time (bullet point 2 above).
 
-On the one hand, we plan on investigating traditional reconstruction techniques to see if we can mitigate the choppiness. On the other, we also plan on training a neural network on data of the same length as our chosen chunk size, so that the training data is representative of our testing conditions.
+Let's hear a sample of a reconstruction performed on the Jetson:
 
-In order to decrease latency, we are looking into the [ONNX standard](https://github.com/onnx/onnx) and [TensorRT](https://developer.nvidia.com/tensorrt), which should better optimize the neural network for fast compuation.
+<audio controls>
+<source src="assets/audio/jetson/est1.wav" type="audio/wav">Your browser does not support the audio element.</audio>
+
+<audio controls>
+<source src="assets/audio/jetson/est2.wav" type="audio/wav">Your browser does not support the audio element.</audio><br/>
+
+One issue with the reconstructions is the random assignment of separated audio. The current model we are using was trained to pick the output configuration that yields the optimal results (Permutation Invariant Training), which is fine for normal separation where the model can see the entire audio recording at once. When processing with chunks, however, the model cannot see future or past chunks, so it essentially randomly assigns the separations to one of the reconstructions. Thus, even if the audio separation is working, the reconstructed audio is still very difficult to understand. One method of solving this would be to train the model without the permutation invariance, which is where we are currently investigating.
  
 ## Appendix: Conv-TasNet Architecture
 
